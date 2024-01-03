@@ -6,7 +6,7 @@
 /*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/03 17:40:50 by sonheres         ###   ########.fr       */
+/*   Updated: 2024/01/03 17:46:19 by sonheres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ static int ft_print_u(va_list args)
     }
 }
 
+//Devuelve nº bytes + imprime nº base 16 en minúsculas.
 static int	ft_print_x(va_list args)
 {
 	int	i;
@@ -208,6 +209,43 @@ static int	ft_print_x(va_list args)
         else
         {
             nb[i++] = num + 'a' - 10;
+        }
+        n = n / 16;
+    }
+    i--; //porque termina el bucle con i apuntando al siguiente hueco
+	//count = write(1, "0x", 2);
+    while (i >= 0)
+    {
+        count = count + write(1, &nb[i], 1);
+        i--;
+    }
+    return (count);
+}
+
+//Devuelve nº bytes + imprime nº base 16 en MAYÚSCULAS.
+static int	ft_print_X(va_list args)
+{
+	int	i;
+    int num;//para almacenar los caracteres
+    int count;
+    char    nb[16];
+    unsigned int    n;
+   
+	i = 0;
+    num = 0;
+    n = va_arg(args, unsigned int);
+    if (n == 0)
+		return (write(1, "0", 1));
+    while (n)
+	{
+		num = n % 16;
+        if (num < 10)
+        {
+            nb[i++] = num + '0';
+        }
+        else
+        {
+            nb[i++] = num + 'A' - 10;
         }
         n = n / 16;
     }
@@ -270,7 +308,7 @@ int	ft_printf(char const *str, ...) // "Hola %s me llamo %s", Antonia, Sonia.
             else if(str[i] == 'X')
             {
                 //funcion que devuelva tb nº bytes
-                //count = count + ft_print_X();
+                count = count + ft_print_X(args);
             }
             else if(str[i] == '%')
             {
@@ -293,13 +331,13 @@ int main(void)
 {
     //char *str = "la lory mayers";
     //char c = 'm';
-    int i = 78517;
+    int i = -587;
     //int kk = printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
     //printf ("%i", kk);
     //char c = 'k';
-    int cc = printf ("%x\n", i);
+    int cc = printf ("%X\n", i);
     printf ("El valor de la variable es: %i\n", cc);
-    int cc2 = ft_printf ("%x\n", i);
+    int cc2 = ft_printf ("%X\n", i);
     printf ("%i\n", cc2);
    //ft_printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
     //printf("devuelve: %p\n", str);
