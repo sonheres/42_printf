@@ -6,7 +6,7 @@
 /*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/03 17:46:19 by sonheres         ###   ########.fr       */
+/*   Updated: 2024/01/03 17:54:04 by sonheres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,7 +313,7 @@ int	ft_printf(char const *str, ...) // "Hola %s me llamo %s", Antonia, Sonia.
             else if(str[i] == '%')
             {
                 //funcion que devuelva tb nº bytes
-                //count = count + ft_print_%();
+                count = count + write(1, "%", 1);
             }
         }
         else 
@@ -331,13 +331,13 @@ int main(void)
 {
     //char *str = "la lory mayers";
     //char c = 'm';
-    int i = -587;
+    int i = 10;
     //int kk = printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
     //printf ("%i", kk);
     //char c = 'k';
-    int cc = printf ("%X\n", i);
+    int cc = printf ("%i%%\n", i);
     printf ("El valor de la variable es: %i\n", cc);
-    int cc2 = ft_printf ("%X\n", i);
+    int cc2 = ft_printf ("%i%%\n", i);
     printf ("%i\n", cc2);
    //ft_printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
     //printf("devuelve: %p\n", str);
