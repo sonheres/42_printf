@@ -6,7 +6,7 @@
 /*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/03 10:50:52 by sonheres         ###   ########.fr       */
+/*   Updated: 2024/01/03 17:40:50 by sonheres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ static int	ft_print_x(va_list args)
         n = n / 16;
     }
     i--; //porque termina el bucle con i apuntando al siguiente hueco
-	count = write(1, "0x", 2);
+	//count = write(1, "0x", 2);
     while (i >= 0)
     {
         count = count + write(1, &nb[i], 1);
@@ -225,7 +225,6 @@ int	ft_printf(char const *str, ...) // "Hola %s me llamo %s", Antonia, Sonia.
     int i;
     int count;
     va_list args;
-    
     va_start(args, str);
     i = 0;
     count = 0;
@@ -294,7 +293,7 @@ int main(void)
 {
     //char *str = "la lory mayers";
     //char c = 'm';
-    int i = 55;
+    int i = 78517;
     //int kk = printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
     //printf ("%i", kk);
     //char c = 'k';
