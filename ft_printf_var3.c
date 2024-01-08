@@ -3,20 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_var3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sohernan <sohernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/08 10:31:57 by sonheres         ###   ########.fr       */
+/*   Updated: 2024/01/08 13:09:19 by sohernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "ft_printf.h"
 
+static int	ft_print_di_count(int i, char *str)
+{
+	int	count;
+	
+	count = 0;
+	while (i >= 0)
+	{
+		if (write(1, &str[i], 1) < 0)
+			return (-1);
+		count++;
+		i--;
+	}
+	return (count);
+}
+
 static int	ft_print_di_dump(long long int n, char *str)
 {
 	int	i;
-	int	count;
 	int	sign;
 
 	i = 0;
@@ -33,15 +47,7 @@ static int	ft_print_di_dump(long long int n, char *str)
 	if (sign == -1)
 		str[i++] = '-';
 	i--;
-	count = 0;
-	while (i >= 0)
-	{
-		if (write(1, &str[i], 1) < 0)
-			return (-1);
-		count++;
-		i--;
-	}
-	return (count);
+	return (ft_print_di_count(i, str));
 }
 
 /*Devuelve nº bytes + imprime nº base 10. 
