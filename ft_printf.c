@@ -6,340 +6,109 @@
 /*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/03 17:54:04 by sonheres         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:33:42 by sonheres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <unistd.h>
-#include <stdarg.h>
-#include <string.h>
+#include "ft_printf.h"
 
-
-//Devuelve nº bytes + imprime str.
-static int ft_print_s(va_list args)
+/* Convierte el parámetro en función del %'letra'.
+Después se lo pasa a ft_printf para que lo imprima. */
+static int	ft_convert(char c, va_list	args)
 {
-    char    *str;
-    int     i;
-
-    str = va_arg(args, char *);
-    i = 0;
-    if (!str)
-        return (write(1, "NULL", 6));
-    while (str[i] != '\0')
-    {
-        write(1, &str[i], 1);
-        i++;
-    }
-    return (i);
-}
-
-//Devuelve nº bytes + imprime char.
-static int ft_print_c(va_list args)
-{
-    char    c;
-    
-    c = va_arg(args, int);
-    if (!c)
-        return (write(1, "NULL", 6));
-    write(1, &c, 1);
-    return (1); //siempre voy a devolver 1 caracter.
-}
-
-/* Devuelve nº bytes + imprime puntero(hexadec). = 'itoa' / Dividir entre 16.
-el parámetro va a ser una dirección d de memoria. El resto siempre va a ser entre 0 y 15.
-0 - 9 -> será un nº; 10 - 15 -> LETRA (A -F);
-numstr = va_arg(args, char *) saco de la lista de argumentos la variable que voy a usar. 
-*/
-static	int	ft_print_p_dump(long long int n, char *str)
-{
-	int	i;
-    int num;//para almacenar los caracteres
-    int count;
-   
-	i = 0;
-    while (n != 0)
-	{
-		num = n % 16;
-        if (num < 10)
-        {
-            str[i++] = num + '0';
-        }
-        else
-        {
-            str[i++] = num + 'a' - 10;
-        }
-        n = n / 16;
-    }
-    i--; //porque termina el bucle con i apuntando al siguiente hueco
-	count = write(1, "0x", 2);
-    while (i >= 0)
-    {
-        count = count + write(1, &str[i], 1);
-        i--;
-    }
-    return (count);
-}
-
-static int ft_print_p(va_list args)
-{
-    char    buffer[16];// almacenamiento temporal
-    char    *pointer;//lo cojo de la lista de argumentos
-    long long int n;
-    int count;
-     
-    pointer = va_arg(args, char *);
-  	if (!pointer)
-		return (write(1, "0x0", 3));
+	if (c == 's')
+		return (ft_print_s(args));
+	else if (c == 'c')
+		return (ft_print_c(args));
+	else if (c == 'p')
+		return (ft_print_p(args));
+	else if (c == 'd')
+		return (ft_print_di(args));
+	else if (c == 'i')
+		return (ft_print_di(args));
+	else if (c == 'u')
+		return (ft_print_u(args));
+	else if (c == 'x')
+		return (ft_print_x(args));
+	else if (c == 'X')
+		return (ft_print_upper_x(args));
+	else if (c == '%')
+		return (write(1, "%", 1));
 	else
-	{
-        n = (unsigned long long int)pointer;
-        count = ft_print_p_dump(n, buffer);//nueva cadena
-        return (count);
-    }
+		return (0);
 }
 
-static	int	ft_print_di_dump(long long int n, char *str)
+/*"Hola %s me llamo %s", Antonia, Sonia.
+// funcion que devuelva tb nº bytes : 
+count = count + ft_convert(str[++i], args);
+// write(1, &str[i], 1); // va escribiendo detrás de lo que hay
+// return (count); // devuelve número caracteres enteros */
+unsigned int	ft_printf(char const *str, ...)
 {
-	int	i;
-    int count;
-    int sign;
-   
+	int					i;
+	unsigned int		count;
+	va_list				args;
+	int					res;
+
+	va_start(args, str);
 	i = 0;
-	sign = 1;
-	if (n < 0)
-		sign = -1;
-	if (n == 0)
-		str[i++] = '0';
-	while (n != 0)
+	count = 0;
+	while (str[i] != '\0')
 	{
-		str[i++] = (n % 10) * sign + '0';
-		n = n / 10;
+		if (str[i] == '%')
+		{
+			res = ft_convert(str[++i], args);
+		}
+		else
+		{
+			res = write(1, &str[i], 1);
+		}
+		if (res < 0)
+			return (-1);
+		count += res;
+		i++;
 	}
-	if (sign == -1)
-		str[i++] = '-';
-	i--; //porque termina el bucle con i apuntando al siguiente hueco
-    count = 0;
-    while (i >= 0)
-    {
-        count = count + write(1, &str[i], 1);
-        i--;
-    }
-    return (count);
+	va_end(args);
+	return (count);
 }
 
-//Devuelve nº bytes + imprime nº base 10.
-static int ft_print_di(va_list args)
-{
-    char    buffer[10];// almacenamiento temporal
-    int n;//lo cojo de la lista de argumentos
-    int count;
-     
-    n = va_arg(args, int);
-  	if (n == 0)
-		return (write(1, "0", 1));
-	else
-	{
-        count = ft_print_di_dump(n, buffer);//nueva cadena
-        return (count);
-    }
-}
-
-static	int	ft_print_u_dump(long long int n, char *str)
-{
-	int	i;
-    int count;
-       
-	i = 0;
-	if (n == 0)
-		str[i++] = '0';
-	while (n)
-	{
-		str[i++] = (n % 10) + '0';
-		n = n / 10;
-	}
-	i--; //porque termina el bucle con i apuntando al siguiente hueco
-    count = 0;
-    while (i >= 0)
-    {
-        count = count + write(1, &str[i], 1);
-        i--;
-    }
-    return (count);
-}
-
-//Devuelve nº bytes + imprime nº base 10 SIN SIGNO.
-static int ft_print_u(va_list args)
-{
-    char    buffer[10];// almacenamiento temporal
-    unsigned int n;//lo cojo de la lista de argumentos
-    int count;
-     
-    n = va_arg(args, int);
-  	if (n == 0)
-		return (write(1, "0", 1));
-	else
-	{
-        count = ft_print_u_dump(n, buffer);//nueva cadena
-        return (count);
-    }
-}
-
-//Devuelve nº bytes + imprime nº base 16 en minúsculas.
-static int	ft_print_x(va_list args)
-{
-	int	i;
-    int num;//para almacenar los caracteres
-    int count;
-    char    nb[16];
-    unsigned int    n;
-   
-	i = 0;
-    num = 0;
-    n = va_arg(args, unsigned int);
-    if (n == 0)
-		return (write(1, "0", 1));
-    while (n)
-	{
-		num = n % 16;
-        if (num < 10)
-        {
-            nb[i++] = num + '0';
-        }
-        else
-        {
-            nb[i++] = num + 'a' - 10;
-        }
-        n = n / 16;
-    }
-    i--; //porque termina el bucle con i apuntando al siguiente hueco
-	//count = write(1, "0x", 2);
-    while (i >= 0)
-    {
-        count = count + write(1, &nb[i], 1);
-        i--;
-    }
-    return (count);
-}
-
-//Devuelve nº bytes + imprime nº base 16 en MAYÚSCULAS.
-static int	ft_print_X(va_list args)
-{
-	int	i;
-    int num;//para almacenar los caracteres
-    int count;
-    char    nb[16];
-    unsigned int    n;
-   
-	i = 0;
-    num = 0;
-    n = va_arg(args, unsigned int);
-    if (n == 0)
-		return (write(1, "0", 1));
-    while (n)
-	{
-		num = n % 16;
-        if (num < 10)
-        {
-            nb[i++] = num + '0';
-        }
-        else
-        {
-            nb[i++] = num + 'A' - 10;
-        }
-        n = n / 16;
-    }
-    i--; //porque termina el bucle con i apuntando al siguiente hueco
-	//count = write(1, "0x", 2);
-    while (i >= 0)
-    {
-        count = count + write(1, &nb[i], 1);
-        i--;
-    }
-    return (count);
-}
-int	ft_printf(char const *str, ...) // "Hola %s me llamo %s", Antonia, Sonia.
-{
-    int i;
-    int count;
-    va_list args;
-    va_start(args, str);
-    i = 0;
-    count = 0;
-    while (str[i] != '\0')
-    {
-        if(str[i] == '%')
-        {
-            i++;
-            if(str[i] == 's')
-            {
-                count = count + ft_print_s(args);
-            }
-            else if(str[i] == 'c')
-            {
-                //funcion que devuelva tb nº bytes
-                count = count + ft_print_c(args);
-            }
-            else if(str[i] == 'p')
-            {
-                //funcion que devuelva tb nº bytes
-                count = count + ft_print_p(args);
-            }
-            else if(str[i] == 'd')
-            {
-                //funcion que devuelva tb nº bytes
-                count = count + ft_print_di(args);
-            }
-            else if(str[i] == 'i')
-            {
-                //funcion que devuelva tb nº bytes
-                count = count + ft_print_di(args);
-            }
-            else if(str[i] == 'u')
-            {
-                //funcion que devuelva tb nº bytes
-                count = count + ft_print_u(args);
-            }
-            else if(str[i] == 'x')
-            {
-                //funcion que devuelva tb nº bytes
-                count = count + ft_print_x(args);
-            }
-            else if(str[i] == 'X')
-            {
-                //funcion que devuelva tb nº bytes
-                count = count + ft_print_X(args);
-            }
-            else if(str[i] == '%')
-            {
-                //funcion que devuelva tb nº bytes
-                count = count + write(1, "%", 1);
-            }
-        }
-        else 
-        {
-            write(1, &str[i], 1);//va escribiendo detrás de lo que hay
-            count++;
-        }
-        i++;
-    }
-    va_end(args);
-    return (count); //devuelve número caracteres enteros
-}
-
+/*
 int main(void)
+ {
+ 	// char *str = "la lory mayers";
+ 	// char c = 'm';
+ 	//int i = 10;
+ 	// int kk = printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
+ 	// printf ("%i", kk);
+ 	// char c = 'k';
+ 	int cc = printf("\001\002\007\v\010\f\r\n");
+	printf("\n");
+ 	printf("El valor de la variable es: %i\n", cc);
+ 	int cc2 = ft_printf("\001\002\007\v\010\f\r\n");
+	printf("\n");
+ 	printf("%i\n", cc2);
+ 	// ft_printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
+	// printf("devuelve: %p\n", str);
+ 	return (0);
+ }
+ */
+/*
+int	main(void)
 {
-    //char *str = "la lory mayers";
-    //char c = 'm';
-    int i = 10;
-    //int kk = printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
-    //printf ("%i", kk);
-    //char c = 'k';
-    int cc = printf ("%i%%\n", i);
-    printf ("El valor de la variable es: %i\n", cc);
-    int cc2 = ft_printf ("%i%%\n", i);
-    printf ("%i\n", cc2);
-   //ft_printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
-    //printf("devuelve: %p\n", str);
-    return (0);
-}
+	char	*s;
+	int		count1;
+	int		count2;
+	int		count3;
+
+	s = "Probando probando y por el camino me voy cagando";
+	count1 = '6';
+	count2 = -356467;
+	count3 = 54673;
+	printf("Funcion printf original:
+	\n%c\n%d\n%i\n%s\n%x\n%X\n%p\n%u\n%%\n", 
+	//count1, count2, count2, s, count3, count3, s, count2);
+	ft_printf("Función ft_printf:\n%c\n%d\n%i\n%s\n%x\n%X\n%p\n%u\n%%\n", 
+	//count1, count2, count2, s, count3, count3, s, count2);
+	return (0);
+} */
