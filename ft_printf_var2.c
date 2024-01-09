@@ -6,12 +6,30 @@
 /*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/08 10:35:51 by sonheres         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:20:15 by sonheres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "ft_printf.h"
+
+static int	ft_print_p_count(int i, char *str)
+{
+	int	count;
+
+	count = write(1, "0x", 2);
+	if (count < 0)
+		return (-1);
+	while (i >= 0)
+	{
+		if (write(1, &str[i], 1) < 0)
+			return (-1);
+		count++;
+		i--;
+	}
+	return (count);
+}
+
 /* Devuelve nº bytes + imprime puntero(hexadec). = 'itoa' / Dividir entre 16
 el parámetro va a ser una dirección d de memoria.
 El resto siempre va a ser entre 0 y 15.
@@ -24,7 +42,6 @@ static int	ft_print_p_dump(unsigned long long int n, char *str)
 {
 	int	i;
 	int	num;
-	int	count;
 
 	i = 0;
 	while (n != 0)
@@ -37,17 +54,7 @@ static int	ft_print_p_dump(unsigned long long int n, char *str)
 		n = n / 16;
 	}
 	i--;
-	count = write(1, "0x", 2);
-	if (count < 0)
-		return (-1);
-	while (i >= 0)
-	{
-		if (write(1, &str[i], 1) < 0)
-			return (-1);
-		count++;
-		i--;
-	}
-	return (count);
+	return (ft_print_p_count(i, str));
 }
 
 /* Devuelve nº bytes + imprime puntero(hexadec).

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_var3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sohernan <sohernan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/08 13:09:19 by sohernan         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:12:06 by sonheres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static int	ft_print_di_count(int i, char *str)
 {
 	int	count;
-	
+
 	count = 0;
 	while (i >= 0)
 	{
@@ -66,6 +66,40 @@ int	ft_print_di(va_list args)
 	{
 		return (ft_print_di_dump(n, buffer));
 	}
+}
+
+// Devuelve nº bytes + imprime str.
+int	ft_print_s(va_list args)
+{
+	char	*str;
+	int		i;
+	int		res;
+
+	str = va_arg(args, char *);
+	i = 0;
+	if (!str)
+		return (write(1, "(null)", 6));
+	while (str[i] != '\0')
+	{
+		res = write(1, &str[i], 1);
+		if (res <= 0)
+			return (-1);
+		i++;
+	}
+	return (i);
+}
+
+// Devuelve nº bytes + imprime char. return (1)->siempre voy a devolver 1 char
+int	ft_print_c(va_list args)
+{
+	char	c;
+	int		res;
+
+	c = va_arg(args, int);
+	res = write(1, &c, 1);
+	if (res <= 0)
+		return (-1);
+	return (1);
 }
 
 /* int main(void)
