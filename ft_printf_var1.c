@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_var1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sohernan <sohernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/09 11:11:43 by sonheres         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:47:44 by sohernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "ft_printf.h"
 
 static int	ft_print_x_count(int i, char *str)
