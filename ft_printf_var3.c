@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf_var3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sohernan <sohernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/09 11:12:06 by sonheres         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:23:31 by sohernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,20 +101,3 @@ int	ft_print_c(va_list args)
 		return (-1);
 	return (1);
 }
-
-/* int main(void)
-{
-	// char *str = "la lory mayers";
-	// char c = 'm';
-	//int i = 10;
-	// int kk = printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
-	// printf ("%i", kk);
-	// char c = 'k';
-	int cc = printf("%d", INT_MIN);
-	printf("El valor de la variable es: %i\n", cc);
-	int cc2 = ft_printf("%d", INT_MIN);
-	printf("%i\n", cc2);
-	// ft_printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
-	// printf("devuelve: %p\n", str);
-	return (0);
-} */

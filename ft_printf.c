@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sonheres <sonheres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sohernan <sohernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/08 10:33:42 by sonheres         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:36:22 by sohernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ static int	ft_convert(char c, va_list	args)
 
 /*"Hola %s me llamo %s", Antonia, Sonia.
 // funcion que devuelva tb nº bytes : 
-count = count + ft_convert(str[++i], args);
-// write(1, &str[i], 1); // va escribiendo detrás de lo que hay
+res = ft_convert(str[++i], args) porque primero hay que avanzar antes de llamar
+al ft_convert. Es decir: Evalúa si es '%' y  después avanza antes de llamar a 
+la función.
+// write(1, &str[i], 1); // va escribiendo detrás de lo que hay. Añade.
 // return (count); // devuelve número caracteres enteros */
 unsigned int	ft_printf(char const *str, ...)
 {
@@ -73,42 +75,22 @@ unsigned int	ft_printf(char const *str, ...)
 	return (count);
 }
 
-/*
-int main(void)
- {
- 	// char *str = "la lory mayers";
- 	// char c = 'm';
- 	//int i = 10;
- 	// int kk = printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
- 	// printf ("%i", kk);
- 	// char c = 'k';
- 	int cc = printf("\001\002\007\v\010\f\r\n");
-	printf("\n");
- 	printf("El valor de la variable es: %i\n", cc);
- 	int cc2 = ft_printf("\001\002\007\v\010\f\r\n");
-	printf("\n");
- 	printf("%i\n", cc2);
- 	// ft_printf("Hola %s me llamo %s\n", "Antonia", "Sonia");
-	// printf("devuelve: %p\n", str);
- 	return (0);
- }
- */
-/*
-int	main(void)
+/* int	main(void)
 {
 	char	*s;
 	int		count1;
 	int		count2;
 	int		count3;
 
-	s = "Probando probando y por el camino me voy cagando";
+	s = "Probando probando";
 	count1 = '6';
 	count2 = -356467;
 	count3 = 54673;
-	printf("Funcion printf original:
-	\n%c\n%d\n%i\n%s\n%x\n%X\n%p\n%u\n%%\n", 
-	//count1, count2, count2, s, count3, count3, s, count2);
-	ft_printf("Función ft_printf:\n%c\n%d\n%i\n%s\n%x\n%X\n%p\n%u\n%%\n", 
-	//count1, count2, count2, s, count3, count3, s, count2);
+	int cc = printf("\n%c\n%d\n%i\n%s\n%x\n%X\n%p\n%u\n%%\n", 
+	count1, count2, count2, s, count3, count3, s, count2);
+	printf("El valor de las variables es: %i\n", cc);
+	int cc_ft = ft_printf("\n%c\n%d\n%i\n%s\n%x\n%X\n%p\n%u\n%%\n", 
+	count1, count2, count2, s, count3, count3, s, count2);
+	printf("El valor de las variables es: %i\n", cc_ft);
 	return (0);
 } */
