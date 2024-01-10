@@ -6,7 +6,7 @@
 /*   By: sohernan <sohernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 17:17:59 by sonheres          #+#    #+#             */
-/*   Updated: 2024/01/09 13:47:19 by sohernan         ###   ########.fr       */
+/*   Updated: 2024/01/10 12:20:17 by sohernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,9 @@ unsigned int	ft_printf(char const *str, ...)
 	while (str[i] != '\0')
 	{
 		if (str[i] == '%')
-		{
 			res = ft_convert(str[++i], args);
-		}
 		else
-		{
 			res = write(1, &str[i], 1);
-		}
 		if (res < 0)
 			return (-1);
 		count += res;
